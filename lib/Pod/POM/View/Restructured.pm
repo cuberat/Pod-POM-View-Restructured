@@ -1,5 +1,5 @@
 # Original authors: don
-# $Revision: $
+# $Revision$
 
 
 =pod
@@ -9,6 +9,13 @@
 Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 
 =head1 SYNOPSIS
+
+    use Pod::POM::View::Restructured;
+
+    my $view = Pod::POM::View::Restructured->new;
+    my $parser = Pod::POM->new;
+    my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
+    my $out = $pom->present($view);
 
 
 =head1 DESCRIPTION
@@ -65,7 +72,7 @@ sub _generic_head {
         $section = $section_line . "\n" . $section;
     }
     
-    return $section;
+    return $section . "\n";
 }
 
 sub view_head1 {
@@ -100,6 +107,16 @@ sub view_item {
     
     $title =~ s/\A\s+//;
     $content = ' ' . $content;
+
+    return $content;
+}
+
+sub view_verbatim {
+    my ($self, $node) = @_;
+
+    my $content = '' . $node;
+
+    return $content . "\n\n";
 }
 
 sub view_seq_code {
