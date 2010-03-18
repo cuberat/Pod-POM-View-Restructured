@@ -27,6 +27,8 @@ use Pod::POM;
         $top_dir = $dir;
     }
 
+    my $test_dir = $top_dir . "/test_doc/source";
+
     use Pod::POM::View::Restructured;
 
     my $view = Pod::POM::View::Restructured->new;
@@ -34,7 +36,13 @@ use Pod::POM;
     my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
     my $out = $pom->present($view);
 
-    print "output:\n\n$out\n";
+    my $out_file = $test_dir . "/restructured.rst";
+    open(my $out_fh, '>', $out_file) or die "couldn't open output file $out_file";
+    binmode($out_fh, ':utf8');
+    print $out_fh $out;
+    close $out_fh;
+    
+    # print "output:\n\n$out\n";
     
 }
 

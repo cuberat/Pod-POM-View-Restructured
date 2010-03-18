@@ -11,7 +11,7 @@ Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 =head1 SYNOPSIS
 
     use Pod::POM::View::Restructured;
-
+    
     my $view = Pod::POM::View::Restructured->new;
     my $parser = Pod::POM->new;
     my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
@@ -20,6 +20,7 @@ Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 
 =head1 DESCRIPTION
 
+This module outputs reStructuredText that is expected to be used with Sphinx.
 
 =head1 VERSION
 
@@ -29,6 +30,7 @@ Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 
 use strict;
 use warnings;
+use Data::Dumper ();
 
 package Pod::POM::View::Restructured;
 
@@ -42,11 +44,13 @@ use base 'Pod::POM::View::Text';
 
 =head2 C<new()>
 
+Constructor.
+
 =cut
 
 sub new {
     my ($class) = @_;
-    my $self = bless {}, ref($class) || $class;
+    my $self = bless { seen_something => 0, }, ref($class) || $class;
     return $self;
 }
 
@@ -61,6 +65,12 @@ sub view_pod {
 sub _generic_head {
     my ($self, $node, $marker, $do_overline) = @_;
 
+    return scalar($self->_generic_head_multi($node, $marker, $do_overline));
+}
+
+sub _generic_head_multi {
+    my ($self, $node, $marker, $do_overline) = @_;
+
     my $title = $node->title()->present($self);
     my $content = $node->content()->present($self);
     
@@ -71,36 +81,62 @@ sub _generic_head {
     if ($do_overline) {
         $section = $section_line . "\n" . $section;
     }
+
+    $section .= "\n";
     
-    return $section . "\n";
+    return wantarray ? ($section, $content, $title) : $section;
 }
 
 sub view_head1 {
     my ($self, $node) = @_;
 
-    return $self->_generic_head($node, '#', 1);
+    my ($section, $content, $title) = $self->_generic_head_multi($node, '*', 1);
+
+    unless ($self->{seen_something}) {
+        if ($title eq 'NAME') {
+            $self->{seen_something} = 1;
+
+            if ($content =~ /\A\s*(\w+(?:::\w+)+)\s+-\s+/s) {
+                my $mod_name = $1;
+                $self->{module_name} = $mod_name;
+                
+                my $line = '#' x length($mod_name);
+                $section = $line . "\n" . $mod_name . "\n" . $line . "\n\n" . $section;
+            }
+            
+            return $section;
+        }
+    }
+    
+    $self->{seen_something} = 1;
+    return $section;
 }
 
 sub view_head2 {
     my ($self, $node) = @_;
 
-    return $self->_generic_head($node, '*', 1);
+    $self->{seen_something} = 1;
+    return $self->_generic_head($node, '=');
 }
 
 sub view_head3 {
     my ($self, $node) = @_;
 
-    return $self->_generic_head($node, '=');
+    $self->{seen_something} = 1;
+    return $self->_generic_head($node, '-');
 }
 
 sub view_head4 {
     my ($self, $node) = @_;
 
-    return $self->_generic_head($node, '-');
+    $self->{seen_something} = 1;
+    return $self->_generic_head($node, '^');
 }
 
 sub view_item {
     my ($self, $node) = @_;
+
+    $self->{seen_something} = 1;
 
     my $title = $node->title()->present($self);
     my $content = $node->content()->present($self);
@@ -114,7 +150,10 @@ sub view_item {
 sub view_verbatim {
     my ($self, $node) = @_;
 
-    my $content = '' . $node;
+    (my $node_part = ' ' . $node) =~ s/\n/\n /g;
+    
+    my $content = ".. code-block:: perl\n\n" . $node_part;
+    
 
     return $content . "\n\n";
 }
@@ -159,11 +198,9 @@ sub view_seq_link {
 
 =pod
 
-=head1 EXAMPLES
-
-
 =head1 DEPENDENCIES
 
+Inherits from Pod::POM::View::Text that comes with the Pod::POM distribution.
 
 =head1 AUTHOR
 
@@ -184,6 +221,8 @@ PURPOSE.
 =head1 SEE ALSO
 
 L<Pod::POM>
+
+L<Pod::POM::View::HTML>
 
 reStructuredText: L<http://docutils.sourceforge.net/rst.html>
 
