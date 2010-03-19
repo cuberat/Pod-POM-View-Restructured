@@ -15,7 +15,7 @@ WriteMakefile(
               dist => { COMPRESS => 'gzip -9f', SUFFIX => 'gz' },
               # DIR => [ ],
               # EXE_FILES => [ ],
-              # PREREQ_PM => { },
+              PREREQ_PM => { 'Pod::POM' => 0 },
               clean => { FILES => 'Pod-POM-View-Restructured-*.tar.gz' },
 );
 
