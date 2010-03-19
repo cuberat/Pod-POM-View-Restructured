@@ -1,0 +1,65 @@
+NAME
+    Pod::POM::View::Restructured - View for Pod::POM that outputs
+    reStructuredText
+
+SYNOPSIS
+        use Pod::POM::View::Restructured;
+        
+    my $view = Pod::POM::View::Restructured->new;
+        my $parser = Pod::POM->new;
+        my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
+        my $out = $pom->present($view);
+
+DESCRIPTION
+    This module outputs reStructuredText that is expected to be used with
+    Sphinx.
+
+VERSION
+     0.01
+
+METHODS
+  "new()"
+    Constructor.
+
+EXAMPLES
+    Document example of setting up sphinx build, generating rst from pod,
+    and building
+
+    Build and document example for pod2rst
+
+    Build and document use for converting multiple files and creating an
+    index
+
+    E.g.,
+
+     [ { file => $file_path, title => $title, link_name => $link_name ] ]
+
+    If no link_name, make up a numbered one. If no title, try to guess title
+    from NAME section, otherwise, make up a number.
+
+DEPENDENCIES
+    Inherits from Pod::POM::View::Text that comes with the Pod::POM
+    distribution.
+
+AUTHOR
+    Don Owens <don@owensnet.com>
+
+LICENSE AND COPYRIGHT
+    Copyright (c) 2010 Don Owens <don@owensnet.com>. All rights reserved.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as Perl itself. See perlartistic.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+SEE ALSO
+    Pod::POM
+
+    Pod::POM::View::HTML
+
+    reStructuredText: <http://docutils.sourceforge.net/rst.html>
+
+    Sphinx (uses reStructuredText): <http://sphinx.pocoo.org/>
+
