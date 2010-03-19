@@ -2,7 +2,7 @@
 abstract: View for Pod::POM that outputs reStructuredText
 author: Don Owens <don@regexguy.com>
 version_from: lib/Pod/POM/View/Restructured.pm
-dist_name: Pod::POM::View::Restructured
+dist_name: Pod-POM-View-Restructured
 pod_files:
  - lib/Pod/POM/View/Restructured.pm
 skip_ppm: 1
