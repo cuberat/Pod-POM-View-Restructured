@@ -198,6 +198,21 @@ sub view_seq_link {
 
 =pod
 
+=head1 EXAMPLES
+
+B<Document example of setting up sphinx build, generating rst from pod, and building>
+
+B<Build and document example for pod2rst>
+
+B<Build and document use for converting multiple files and creating an index>
+
+E.g.,
+
+ [ { file => $file_path, title => $title, link_name => $link_name ] ]
+
+If no link_name, make up a numbered one.  If no title, try to
+guess title from NAME section, otherwise, make up a number.
+
 =head1 DEPENDENCIES
 
 Inherits from Pod::POM::View::Text that comes with the Pod::POM distribution.
