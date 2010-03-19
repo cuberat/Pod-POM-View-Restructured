@@ -1,6 +1,19 @@
 # Original authors: don
 # $Revision$
 
+# Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
+#
+# This is free software; you can redistribute it and/or modify it under
+# the Perl Artistic license.  You should have received a copy of the
+# Artistic license with this distribution, in the file named
+# "Artistic".  You may also obtain a copy from
+# http://regexguy.com/license/Artistic
+#
+# This program is distributed in the hope that it will be
+# useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+# PURPOSE.
+
 
 =pod
 
@@ -219,11 +232,11 @@ Inherits from Pod::POM::View::Text that comes with the Pod::POM distribution.
 
 =head1 AUTHOR
 
-Don Owens <don@owensnet.com>
+Don Owens <don@regexguy.com>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2010 Don Owens <don@owensnet.com>.  All rights reserved.
+Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
 
 This is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.  See perlartistic.
