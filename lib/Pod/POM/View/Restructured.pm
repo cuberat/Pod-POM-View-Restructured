@@ -69,12 +69,26 @@ sub new {
     return $self;
 }
 
+=pod
+
+=head2 C<convert_file($source_file, $title, $dest_file)>
+
+Converts the POD in C<$source_file> to reStructuredText.  If
+C<$dest_file> is defined, it writes the output there.  If C<$title> is
+defined, it is used for the title of the document.
+
+Returns the output as a string.
+
+C<$source_file> and C<$dest_file> can be either file names or file
+handles.
+
+=cut
 sub convert_file {
-    my ($self, $source_path, $title, $dest_file) = @_;
+    my ($self, $source_file, $title, $dest_file) = @_;
 
     my $view = Pod::POM::View::Restructured->new;
     my $parser = Pod::POM->new;
-    my $pom = $parser->parse_file($source_path);
+    my $pom = $parser->parse_file($source_file);
 
     $view->{title_set} = 1 if defined($title);
     my $out = $pom->present($view);
