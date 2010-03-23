@@ -117,6 +117,38 @@ sub convert_file {
     return $out;
 }
 
+sub convert_files {
+    my ($self, $file_spec, $index_file, $index_title) = @_;
+
+    my $index_fh = $self->_get_file_handle($index_file, '>');
+    
+    foreach my $spec (@$file_spec) {
+        # FIXME: finish HERE
+    }
+}
+
+sub _get_file_handle {
+    my ($self, $file, $mode) = @_;
+
+    return undef unless defined $file;
+    
+    if (ref($file) and UNIVERSAL::isa($file, 'GLOB')) {
+        return $file;
+    }
+
+    $mode = '<' unless $mode;
+    
+    my $fh;
+    if ($file) {
+        unless (open($fh, $mode, $file)) {
+            warn "couldn't open input file $file: $!";
+            return undef;
+        }
+    }
+
+    return $fh;
+}
+
 sub view_pod {
     my ($self, $node) = @_;
 
