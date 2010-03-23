@@ -45,6 +45,8 @@ use strict;
 use warnings;
 use Data::Dumper ();
 
+use Pod::POM;
+
 package Pod::POM::View::Restructured;
 
 our $VERSION = '0.01';
@@ -63,8 +65,42 @@ Constructor.
 
 sub new {
     my ($class) = @_;
-    my $self = bless { seen_something => 0, }, ref($class) || $class;
+    my $self = bless { seen_something => 0, title_set => 0 }, ref($class) || $class;
     return $self;
+}
+
+sub convert_file {
+    my ($self, $source_path, $title, $dest_file) = @_;
+
+    my $view = Pod::POM::View::Restructured->new;
+    my $parser = Pod::POM->new;
+    my $pom = $parser->parse_file($source_path);
+
+    $view->{title_set} = 1 if defined($title);
+    my $out = $pom->present($view);
+
+    if (defined($title)) {
+        my $line = '#' x length($title);
+        $out = $line . "\n" . $title . "\n" . $line . "\n\n" . $out;
+    }
+
+    if (defined($dest_file) and $dest_file ne '') {
+        my $out_fh;
+        if (UNIVERSAL::isa($dest_file, 'GLOB')) {
+            $out_fh = $dest_file;
+        }
+        else {
+            unless (open($out_fh, '>', $dest_file)) {
+                warn "couldn't open output file $dest_file";
+                return undef;
+            }
+        }
+
+        print $out_fh $out;
+        close $out_fh;
+    }
+
+    return $out;
 }
 
 sub view_pod {
@@ -105,13 +141,14 @@ sub view_head1 {
 
     my ($section, $content, $title) = $self->_generic_head_multi($node, '*', 1);
 
-    unless ($self->{seen_something}) {
+    unless ($self->{seen_something} or $self->{title_set}) {
         if ($title eq 'NAME') {
             $self->{seen_something} = 1;
 
             if ($content =~ /\A\s*(\w+(?:::\w+)+)\s+-\s+/s) {
                 my $mod_name = $1;
                 $self->{module_name} = $mod_name;
+                $self->{title_set} = 1;
                 
                 my $line = '#' x length($mod_name);
                 $section = $line . "\n" . $mod_name . "\n" . $line . "\n\n" . $section;
