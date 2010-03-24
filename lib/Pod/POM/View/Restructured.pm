@@ -137,7 +137,7 @@ sub convert_files {
 
         print $index_fh "\nContents:\n\n";
         print $index_fh ".. toctree::\n";
-        print $index_fh "   :maxdepth: 2\n\n";
+        print $index_fh "   :maxdepth: 1\n\n";
     }
 
     my $count = 0;
@@ -148,7 +148,7 @@ sub convert_files {
                                        $spec->{dest_file});
         
         my $this_title = $data->{title};
-        print STDERR Data::Dumper->Dump([ $this_title ], [ 'this_title' ]) . "\n\n";
+        # print STDERR Data::Dumper->Dump([ $this_title ], [ 'this_title' ]) . "\n\n";
 
         unless (defined($this_title) and $this_title !~ /\A\s*\Z/) {
             $this_title = 'section_' . $count;
@@ -227,7 +227,7 @@ sub _generic_head_multi {
     my $content = $node->content()->present($self);
     
     $title = ' ' if $title eq '';
-    my $section_line = $marker x length($title);
+    # my $section_line = $marker x length($title);
 
     my $section = $self->_build_header($title, $marker, $do_overline) . "\n" . $content;
     
@@ -252,6 +252,21 @@ sub _build_header {
     }
 
     return $header;
+}
+
+sub _do_indent {
+    my ($self, $text, $indent_amount, $dbg) = @_;
+
+    my $indent = ' ' x $indent_amount;
+
+    # $indent = "'$dbg" . $indent . "'";
+
+    my @lines = split /\n/, $text, -1;
+    foreach my $line (@lines) {
+        $line = $indent . $line;
+    }
+
+    return join("\n", @lines);
 }
 
 sub view_head1 {
@@ -311,10 +326,23 @@ sub view_item {
     my $content = $node->content()->present($self);
     
     $title =~ s/\A\s+//;
-    $content =~ s/\n/\n /g;
-    $content = ' ' . $content;
+    $title =~ s/\n/ /;
+#     $content =~ s/\n/\n /g;
+#     $content = ' ' . $content;
 
-    return $content;
+    $self->{view_item_count}++;
+    $content = $self->_do_indent($content, 1, "[[view_item_$self->{view_item_count}]]");
+    
+    return "\n" . $title . "\n" . $content;
+}
+
+sub view_over {
+    my ($self, $node) = @_;
+
+    my $content = $node->content()->present($self);
+    # my $indent = $node->indent();
+
+    return "\n" . $content;
 }
 
 sub view_text {
@@ -331,12 +359,44 @@ sub view_text {
 sub view_verbatim {
     my ($self, $node) = @_;
 
-    (my $node_part = ' ' . $node) =~ s/\n/\n /g;
-    
-    my $content = ".. code-block:: perl\n\n" . $node_part;
-    
+    # (my $node_part = ' ' . $node) =~ s/\n/\n /g;
+    my $node_part = $self->_do_indent($node . '', 1, '[[view_verbatim]]');
+
+    my $block_part = ".. code-block:: perl\n\n";
+    if (defined($self->{next_code_block})) {
+        my $lang = $self->{next_code_block};
+        delete $self->{next_code_block};
+
+        if ($lang eq 'none') {
+            # FIXME: need to output a preformatted paragraph here, but no highlighting
+            $block_part = '';
+        }
+        else {
+            $block_part = ".. code-block:: $lang\n\n";
+        }
+    }
+   
+    my $content = $block_part . $node_part;
 
     return $content . "\n\n";
+}
+
+sub view_for {
+    my ($self, $node) = @_;
+
+    my $fmt = $node->format();
+
+    # print STDERR "got for: fmt='$fmt', text='" . $node->text() . "'\n";
+    
+    if ($fmt eq 'pod2rst') {
+        my $text = $node->text();
+        if ($text =~ /\A\s*next-code-block\s*:\s*(\S+)/) {
+            my $lang = $1;
+            $self->{next_code_block} = $lang;
+        }
+    }
+
+    return $self->SUPER::view_for($node);
 }
 
 sub view_seq_code {
@@ -393,6 +453,15 @@ E.g.,
 
 If no link_name, make up a numbered one.  If no title, try to
 guess title from NAME section, otherwise, make up a number.
+
+
+=head1 TODO
+
+=over 4
+
+=item Currently, a verbatim block (indented paragraph) gets output as a Perl code block in reStructuredText.  There should be an option to change the language for highlighting purposes, or disable syntax hilighting and just make it a preformatted paragraph.
+
+=back
 
 =head1 DEPENDENCIES
 
