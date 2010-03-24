@@ -94,8 +94,12 @@ sub convert_file {
     my $out = $pom->present($view);
 
     if (defined($title)) {
-        my $line = '#' x length($title);
-        $out = $line . "\n" . $title . "\n" . $line . "\n\n" . $out;
+#         my $line = '#' x length($title);
+#         $out = $line . "\n" . $title . "\n" . $line . "\n\n" . $out;
+        $out = $self->_build_header($title, '#', 1) . "\n" . $out;
+    }
+    else {
+        $title = $view->{title};
     }
 
     if (defined($dest_file) and $dest_file ne '') {
@@ -114,17 +118,70 @@ sub convert_file {
         close $out_fh;
     }
 
-    return $out;
+    my $rv = { content => $out, title => $title };
+
+    return $rv;
 }
 
 sub convert_files {
-    my ($self, $file_spec, $index_file, $index_title) = @_;
+    my ($self, $file_spec, $index_file, $index_title, $out_dir) = @_;
 
     my $index_fh = $self->_get_file_handle($index_file, '>');
-    
-    foreach my $spec (@$file_spec) {
-        # FIXME: finish HERE
+
+    if ($index_fh and defined($index_title) and $index_title ne '') {
+        my $header = $self->_build_header($index_title, '#', 1);
+#         my $line = '#' x length($index_title);
+#         my $header = $line . "\n" . $index_title . "\n" . $line . "\n\n";
+
+        print $index_fh $header;
+
+        print $index_fh "\nContents:\n\n";
+        print $index_fh ".. toctree::\n";
+        print $index_fh "   :maxdepth: 2\n\n";
     }
+
+    my $count = 0;
+    my $toc = '';
+    foreach my $spec (@$file_spec) {
+        $count++;
+        my $data = $self->convert_file($spec->{source_file}, $spec->{title},
+                                       $spec->{dest_file});
+        
+        my $this_title = $data->{title};
+        print STDERR Data::Dumper->Dump([ $this_title ], [ 'this_title' ]) . "\n\n";
+
+        unless (defined($this_title) and $this_title !~ /\A\s*\Z/) {
+            $this_title = 'section_' . $count;
+        }
+        
+        my $name = $spec->{dest_file};
+        if (defined($name)) {
+            $name =~ s/\.rst\Z//;
+        }
+        else {
+            ($name = $this_title) =~ s/\W/_/g;
+            my $dest_file = $out_dir . '/' . $name . '.rst';
+            my $out_fh;
+            
+            unless (open($out_fh, '>', $dest_file)) {
+                warn "couldn't open output file $dest_file";
+                return undef;
+            }
+
+            print $out_fh $data->{content};
+            close $out_fh;
+        }
+
+        $toc .= '   ' . $name . "\n";
+        
+        if ($index_fh) {
+            print $index_fh "   " . $name . "\n";
+        }
+    }
+
+    print $index_fh "\n";
+
+    return { toc => $toc };
 }
 
 sub _get_file_handle {
@@ -139,7 +196,7 @@ sub _get_file_handle {
     $mode = '<' unless $mode;
     
     my $fh;
-    if ($file) {
+    if ($file ne '') {
         unless (open($fh, $mode, $file)) {
             warn "couldn't open input file $file: $!";
             return undef;
@@ -172,14 +229,29 @@ sub _generic_head_multi {
     $title = ' ' if $title eq '';
     my $section_line = $marker x length($title);
 
-    my $section = $title . "\n" . $section_line . "\n\n" . $content;
-    if ($do_overline) {
-        $section = $section_line . "\n" . $section;
-    }
+    my $section = $self->_build_header($title, $marker, $do_overline) . "\n" . $content;
+    
+#     my $section = $title . "\n" . $section_line . "\n\n" . $content;
+#     if ($do_overline) {
+#         $section = $section_line . "\n" . $section;
+#     }
 
     $section .= "\n";
     
     return wantarray ? ($section, $content, $title) : $section;
+}
+
+sub _build_header {
+    my ($self, $text, $marker, $do_overline) = @_;
+
+    my $line = $marker x length($text);
+    my $header = $text . "\n" . $line . "\n";
+
+    if ($do_overline) {
+        $header = $line . "\n" . $header;
+    }
+
+    return $header;
 }
 
 sub view_head1 {
@@ -194,6 +266,7 @@ sub view_head1 {
             if ($content =~ /\A\s*(\w+(?:::\w+)+)\s+-\s+/s) {
                 my $mod_name = $1;
                 $self->{module_name} = $mod_name;
+                $self->{title} = $mod_name;
                 $self->{title_set} = 1;
                 
                 my $line = '#' x length($mod_name);
@@ -238,9 +311,21 @@ sub view_item {
     my $content = $node->content()->present($self);
     
     $title =~ s/\A\s+//;
+    $content =~ s/\n/\n /g;
     $content = ' ' . $content;
 
     return $content;
+}
+
+sub view_text {
+    my ($self, $node) = @_;
+
+    my @lines = split /\n/, $node;
+    foreach my $line (@lines) {
+        $line =~ s/\A\s+//;
+    }
+
+    return join("\n", @lines);
 }
 
 sub view_verbatim {
