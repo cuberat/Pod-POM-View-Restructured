@@ -295,7 +295,7 @@ sub _build_header {
         $header = $line . "\n" . $header;
     }
 
-    return $header;
+    return "\n" . $header;
 }
 
 sub _do_indent {
@@ -327,9 +327,11 @@ sub view_head1 {
                 $self->{module_name} = $mod_name;
                 $self->{title} = $mod_name;
                 $self->{title_set} = 1;
+
+                $section = $self->_build_header($mod_name, '#', 1) . $section;
                 
-                my $line = '#' x length($mod_name);
-                $section = $line . "\n" . $mod_name . "\n" . $line . "\n\n" . $section;
+                # my $line = '#' x length($mod_name);
+                # $section = $line . "\n" . $mod_name . "\n" . $line . "\n\n" . $section;
             }
             
             return $section;
@@ -400,6 +402,13 @@ sub view_text {
     return join("\n", @lines);
 }
 
+sub x_view_textblock {
+    my ($self, $text) = @_;
+
+    return $text;
+}
+
+
 sub view_verbatim {
     my ($self, $node) = @_;
 
@@ -422,7 +431,7 @@ sub view_verbatim {
    
     my $content = $block_part . $node_part;
 
-    return $content . "\n\n";
+    return "\n\n" . $content . "\n\n";
 }
 
 sub view_for {
@@ -437,7 +446,10 @@ sub view_for {
         if ($text =~ /\A\s*next-code-block\s*:\s*(\S+)/) {
             my $lang = $1;
             $self->{next_code_block} = $lang;
+            return '';
         }
+
+        return '';
     }
 
     return $self->SUPER::view_for($node);
@@ -476,6 +488,21 @@ sub view_seq_file {
     return '\ *' . $text . '*\ ';
 }
 
+sub x_view_seq_text {
+    my ($self, $node) = @_;
+
+    my $text = $node . '';
+
+    $text =~ s/\*/\\*/g;
+    $text =~ s/\`/\\`/g;
+
+    return $text;
+}
+
+sub view_seq_zero {
+    return '';
+}
+
 sub view_seq_link {
     my ($self, $text) = @_;
 
@@ -484,7 +511,7 @@ sub view_seq_link {
     }
     elsif ($text =~ /::/) {
         my $url = "http://search.cpan.org/search?query=$text&mode=module";
-        $text = qq{`$text <$url>`_};
+        $text = qq{\ `$text <$url>`_\ };
     }
     
     return $text;
