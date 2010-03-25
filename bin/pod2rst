@@ -152,3 +152,71 @@ sub get_options {
     return $opt_rv ? \%opts : undef;
 }
 ########## end option processing ##########
+
+
+=pod
+
+=head1 NAME
+
+pod2rst - convert .pod files to .rst files
+
+=head1 SYNOPSIS
+
+=for pod2rst next-code-block: bash
+
+pod2rst --infile=<name> --outfile=<name> --title=<name>
+
+=head1 DESCRIPTION
+
+Converts files containing POD to reStructuredText format for input to Sphinx.
+
+=head1 ARGUMENTS
+
+C<pod2rst> takes the following arguments:
+
+=over 4
+
+=item infile
+
+ --infile=<name>
+
+Specifies the pod file to convert.  Input is taken from stdin by default.
+
+=item outfile
+
+ --outfile=<name>
+
+Specifies the reStructuredText file to create.  Output goes to stdout by default.
+
+=item title
+
+ --title=<title>
+
+Specifies the section title for the file.
+
+=back
+
+=head1 AUTHOR
+
+Don Owens <don@regexguy.com>
+
+=head1 SEE ALSO
+
+L<Pod::POM::View::Restructured>, L<pod2html>
+
+Sphinx: L<http://sphinx.pocoo.org/>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
+
+This is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.  See perlartistic.
+
+This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+PURPOSE.
+
+
+=cut

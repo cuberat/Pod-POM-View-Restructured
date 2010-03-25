@@ -23,21 +23,18 @@ Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 
 =head1 SYNOPSIS
 
-    use Pod::POM::View::Restructured;
-    
-    my $view = Pod::POM::View::Restructured->new;
-    my $parser = Pod::POM->new;
-    my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
-    my $out = $pom->present($view);
+ use Pod::POM::View::Restructured;
+ 
+ my $view = Pod::POM::View::Restructured->new;
+ my $parser = Pod::POM->new;
+ my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
+ my $out = $pom->present($view);
 
 
 =head1 DESCRIPTION
 
-This module outputs reStructuredText that is expected to be used with Sphinx.
+This module outputs reStructuredText that is expected to be used with Sphinx.  Verbatim sections (indented paragraphs) in the POD will be output with syntax hilighting for Perl code by default.  See L</"POD commands specifically for reStructuredText"> for how to change this for a particular block.
 
-=head1 VERSION
-
- 0.01
 
 =cut
 
@@ -49,7 +46,7 @@ use Pod::POM;
 
 package Pod::POM::View::Restructured;
 
-our $VERSION = '0.01';
+our $VERSION = '0.01'; # change in POD below!
 
 use base 'Pod::POM::View::Text';
 
@@ -74,8 +71,10 @@ sub new {
 =head2 C<convert_file($source_file, $title, $dest_file)>
 
 Converts the POD in C<$source_file> to reStructuredText.  If
-C<$dest_file> is defined, it writes the output there.  If C<$title> is
-defined, it is used for the title of the document.
+C<$dest_file> is defined, it writes the output there.  If
+C<$title> is defined, it is used for the title of the document.
+Otherwise, an attempt is made to infer the title from the NAME
+section (checks if the body looks like C</\A\s*(\w+(?:::\w+)+)\s+-\s+/s>).
 
 Returns the output as a string.
 
@@ -94,8 +93,6 @@ sub convert_file {
     my $out = $pom->present($view);
 
     if (defined($title)) {
-#         my $line = '#' x length($title);
-#         $out = $line . "\n" . $title . "\n" . $line . "\n\n" . $out;
         $out = $self->_build_header($title, '#', 1) . "\n" . $out;
     }
     else {
@@ -123,6 +120,53 @@ sub convert_file {
     return $rv;
 }
 
+=pod
+
+=head2 C<convert_files($file_spec, $index_file, $index_title, $out_dir)>
+
+Converts the files given in C<$file_spec> to reStructuredText.
+If C<$index_file> is provided, it is the path to the index file
+to be created (with a table of contents pointing to all of the
+files created).  If C<$index_title> is provided, it is used as
+the section title for the index file.  C<$out_dir> is the
+directory the generated files will be written to.
+
+C<$file_spec> is a reference to an array of hashes specifying
+attributes for each file to be converted.  The valid keys are:
+
+=over 4
+
+=item C<source_file>
+
+File to convert.
+
+=item C<dest_file>
+
+File to output the reStructuredText.  If not provided, a file
+name will be generated based on the title.
+
+=item C<title>
+
+Section title for the generated reStructuredText.  If not
+provided, an attempt will be made to infer the title from the
+NAME section in the POD, if it exists.  As a last resort, a title
+will be generated that looks like "section_(\d+)".
+
+=back
+
+ my $conv = Pod::POM::View::Restructured->new;
+ 
+ my $files = [
+              { source_file => "$base_dir/Restructured.pm" },
+              { source_file => "$base_dir/DWIW.pm" },
+              { source_file => "$base_dir/Wrapper.pm" },
+             ];
+ 
+ 
+ my $rv = $conv->convert_files($files, "$dest_dir/index.rst", 'My Big Test', $dest_dir);
+
+
+=cut
 sub convert_files {
     my ($self, $file_spec, $index_file, $index_title, $out_dir) = @_;
 
@@ -333,7 +377,7 @@ sub view_item {
     $self->{view_item_count}++;
     $content = $self->_do_indent($content, 1, "[[view_item_$self->{view_item_count}]]");
     
-    return "\n" . $title . "\n" . $content;
+    return "\n" . $title . "\n" . $content . "\n";
 }
 
 sub view_over {
@@ -423,6 +467,15 @@ sub view_seq_italic {
     return '\ *' . $text . '*\ ';
 }
 
+sub view_seq_file {
+    my ($self, $text) = @_;
+
+    $text =~ s/\*/\\*/g;
+    $text =~ s/\`/\\`/g;
+    
+    return '\ *' . $text . '*\ ';
+}
+
 sub view_seq_link {
     my ($self, $text) = @_;
 
@@ -439,27 +492,59 @@ sub view_seq_link {
 
 =pod
 
+=head1 POD commands specifically for reStructuredText
+
+The following sequences can be used in POD to request actions specifically for this module.
+
+=head2 =Z<>for pod2rst next-code-block: I<lang>
+
+This sets up the next verbatim section, i.e., the next indented
+paragraph to be hilighted according to the syntax of the
+programming/markup/config language I<lang>.  Verbatim sections
+are assumed to be Perl code by default.  Sphinx uses Pygments to
+do syntax hilighting in these sections, so you can use any value
+for I<lang> that Pygments supports, e.g., Python, C, C++,
+Javascript, SQL, etc.
+
 =head1 EXAMPLES
 
-B<Document example of setting up sphinx build, generating rst from pod, and building>
+=over 4
 
-B<Build and document example for pod2rst>
+=item Converting a single file using C<pod2rst>
 
-B<Build and document use for converting multiple files and creating an index>
+=for pod2rst next-code-block: bash
 
-E.g.,
+ pod2rst --infile=Restructured.pm --outfile=restructured.rst
 
- [ { file => $file_path, title => $title, link_name => $link_name ] ]
+=back
 
-If no link_name, make up a numbered one.  If no title, try to
-guess title from NAME section, otherwise, make up a number.
+B<Need to document:>
+
+=over 4
+
+=item B<Document example of setting up sphinx build, generating rst from pod, and building>
+
+=back
 
 
 =head1 TODO
 
 =over 4
 
-=item Currently, a verbatim block (indented paragraph) gets output as a Perl code block in reStructuredText.  There should be an option to change the language for highlighting purposes, or disable syntax hilighting and just make it a preformatted paragraph.
+=item code hilighting
+
+Currently, a verbatim block (indented paragraph) gets output as a
+Perl code block by default in reStructuredText. There should be
+an option (e.g., in the constructor) to change the language for
+hilighting purposes (for all verbatim blocks), or disable syntax
+hilighting and just make it a preformatted paragraph.  There is a
+way to do this in POD (see L</"POD commands specifically for reStructuredText">),
+but there should also be an option in the constructor.
+
+=item improve escaping
+
+Text blocks are not escaped properly, so it is currently possible
+to invoke a command in reStructuredText by accident.
 
 =back
 
@@ -489,9 +574,17 @@ L<Pod::POM>
 
 L<Pod::POM::View::HTML>
 
+L<pod2rst> (distributed with Pod::POM::View::HTML)
+
 reStructuredText: L<http://docutils.sourceforge.net/rst.html>
 
 Sphinx (uses reStructuredText): L<http://sphinx.pocoo.org/>
+
+Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
+
+=head1 VERSION
+
+ 0.01
 
 =cut
 
