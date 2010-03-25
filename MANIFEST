@@ -1,6 +1,8 @@
 Makefile.PL
 ChangeLog
 README
+INSTALL
 lib/Pod/POM/View/Restructured.pm
+bin/pod2rst
 t/00use.t
 MANIFEST
