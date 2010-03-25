@@ -379,7 +379,7 @@ sub view_item {
     $self->{view_item_count}++;
     $content = $self->_do_indent($content, 1, "[[view_item_$self->{view_item_count}]]");
     
-    return "\n" . $title . "\n" . $content . "\n";
+    return "\n" . $title . "\n" . $content . "\n\n";
 }
 
 sub view_over {
@@ -402,10 +402,10 @@ sub view_text {
     return join("\n", @lines);
 }
 
-sub x_view_textblock {
+sub view_textblock {
     my ($self, $text) = @_;
 
-    return $text;
+    return "\n" . $text . "\n";
 }
 
 
@@ -488,7 +488,7 @@ sub view_seq_file {
     return '\ *' . $text . '*\ ';
 }
 
-sub x_view_seq_text {
+sub view_seq_text {
     my ($self, $node) = @_;
 
     my $text = $node . '';
