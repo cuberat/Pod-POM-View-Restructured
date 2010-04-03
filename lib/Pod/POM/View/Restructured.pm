@@ -46,7 +46,7 @@ use Pod::POM;
 
 package Pod::POM::View::Restructured;
 
-our $VERSION = '0.01'; # change in POD below!
+our $VERSION = '0.01.1'; # change in POD below!
 
 use base 'Pod::POM::View::Text';
 
@@ -223,7 +223,9 @@ sub convert_files {
         }
     }
 
-    print $index_fh "\n";
+    if ($index_fh) {
+        print $index_fh "\n";
+    }
 
     return { toc => $toc };
 }
