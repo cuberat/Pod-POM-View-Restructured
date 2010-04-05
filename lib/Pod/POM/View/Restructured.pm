@@ -54,21 +54,34 @@ use base 'Pod::POM::View::Text';
 
 =head1 METHODS
 
-=head2 C<new()>
+=head2 C<new(\%params)>
 
-Constructor.
+Constructor.  \%params is optional.  If present, the following keys are valid:
+
+=over 4
+
+=item callbacks
+
+=back
 
 =cut
 
 sub new {
-    my ($class) = @_;
-    my $self = bless { seen_something => 0, title_set => 0 }, ref($class) || $class;
+    my ($class, $params) = @_;
+    $params = { } unless $params and UNIVERSAL::isa($params, 'HASH');
+    
+    my $self = bless { seen_something => 0, title_set => 0, params => { } }, ref($class) || $class;
+
+    my $callbacks = $params->{callbacks};
+    $callbacks = { } unless $callbacks;
+    $self->{callbacks} = $callbacks;
+    
     return $self;
 }
 
 =pod
 
-=head2 C<convert_file($source_file, $title, $dest_file)>
+=head2 C<convert_file($source_file, $title, $dest_file, $callbacks)>
 
 Converts the POD in C<$source_file> to reStructuredText.  If
 C<$dest_file> is defined, it writes the output there.  If
@@ -83,9 +96,9 @@ handles.
 
 =cut
 sub convert_file {
-    my ($self, $source_file, $title, $dest_file) = @_;
+    my ($self, $source_file, $title, $dest_file, $callbacks) = @_;
 
-    my $view = Pod::POM::View::Restructured->new;
+    my $view = Pod::POM::View::Restructured->new({ callbacks => $callbacks });
     my $parser = Pod::POM->new;
     my $pom = $parser->parse_file($source_file);
 
@@ -152,6 +165,10 @@ provided, an attempt will be made to infer the title from the
 NAME section in the POD, if it exists.  As a last resort, a title
 will be generated that looks like "section_(\d+)".
 
+=item C<callbacks>
+
+A reference to a hash containing names and the corresponding callbacks.
+
 =back
 
  my $conv = Pod::POM::View::Restructured->new;
@@ -189,7 +206,7 @@ sub convert_files {
     foreach my $spec (@$file_spec) {
         $count++;
         my $data = $self->convert_file($spec->{source_file}, $spec->{title},
-                                       $spec->{dest_file});
+                                       $spec->{dest_file}, $spec->{callbacks});
         
         my $this_title = $data->{title};
         # print STDERR Data::Dumper->Dump([ $this_title ], [ 'this_title' ]) . "\n\n";
@@ -508,16 +525,55 @@ sub view_seq_zero {
 sub view_seq_link {
     my ($self, $text) = @_;
 
+    # FIXME: determine if has label, if manpage, etc., and pass that info along to the callback,
+    #        instead of just the text, e.g.,
+    #        $link_cb->($label, $name, $sec, $url);
+    my $link_cb = $self->{callbacks}{link};
+    if ($link_cb) {
+        my ($url, $label) = $link_cb->($text);
+
+        if (defined($url)) {
+            if ($url eq '' and defined($label) and $label ne '') {
+                $text = $label;
+            }
+            elsif (defined($label) and $label ne '') {
+                $text = qq{`$label <$url>`_};
+            }
+            else {
+                $text = qq{`$url <$url>`_};
+            }
+
+            return $text;
+        }
+    }
+    
     if ($text =~ m{\Ahttps?://}) {
         $text = qq{`$text <$text>`_};
     }
     elsif ($text =~ /::/) {
-        my $url = "http://search.cpan.org/search?query=$text&mode=module";
-        $text = qq{\ `$text <$url>`_\ };
+        my $label = $text;
+        my $module = $text;
+        if ($text =~ /\A(.+?)\|(.+::.+)/) {
+            $label = $1;
+            $module = $2;
+        }
+
+        $module = $self->_url_encode($module);
+        my $url = "http://search.cpan.org/search?query=$module&mode=module";
+        $text = qq{`$label <$url>`_};
     }
     
     return $text;
 }
+
+sub _url_encode {
+    my ($self, $str) = @_;
+    
+    use bytes;
+    $str =~ s{([^A-Za-z0-9_])}{sprintf("%%%02x", ord($1))}eg;
+    return $str;
+}
+
 
 =pod
 

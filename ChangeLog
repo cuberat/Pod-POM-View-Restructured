@@ -1,0 +1,4 @@
+Version 0.02
+	* Added callbacks parameter
+	* Fixed bug where the module tried to write to an unopened index file
+	    
