@@ -169,7 +169,21 @@ will be generated that looks like "section_(\d+)".
 
 A reference to a hash containing names and the corresponding callbacks.
 
+Currently the only valid callback is C<link>.  It is given the
+text inside a LE<lt>E<gt> section from the POD, and is expected to return a
+tuple C<($url, $label)>.  If the value returned for C<$label> is
+undefined, the value of C<$url> is used as the label.
+
+=item C<no_toc>
+
+Causes the item to not be printed to the index or return in the C<toc> field.
+
 =back
+
+This method returns a hash ref with a table of contents (the
+C<toc> field) suitable for a reStructuredText table of contents.
+
+E.g.,
 
  my $conv = Pod::POM::View::Restructured->new;
  
@@ -233,9 +247,11 @@ sub convert_files {
             close $out_fh;
         }
 
-        $toc .= '   ' . $name . "\n";
+        unless ($spec->{no_toc}) {
+            $toc .= '   ' . $name . "\n";
+        }
         
-        if ($index_fh) {
+        if ($index_fh and not $spec->{no_toc}) {
             print $index_fh "   " . $name . "\n";
         }
     }
