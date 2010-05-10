@@ -17,11 +17,21 @@ DESCRIPTION
     commands specifically for reStructuredText" for how to change this for a
     particular block.
 
-METHODS
-  "new()"
-    Constructor.
+    For a list of changes in recent versions, see the documentation for
+    Pod::POM::View::Restructured::Changes.
 
-  "convert_file($source_file, $title, $dest_file)"
+    This module can be downloaded from
+    <http://www.cpan.org/authors/id/D/DO/DOWENS/>.
+
+METHODS
+  "new(\%params)"
+    Constructor. \%params is optional. If present, the following keys are
+    valid:
+
+    "callbacks"
+        See documentation below for "convert_file()".
+
+  "convert_file($source_file, $title, $dest_file, $callbacks)"
     Converts the POD in $source_file to reStructuredText. If $dest_file is
     defined, it writes the output there. If $title is defined, it is used
     for the title of the document. Otherwise, an attempt is made to infer
@@ -54,6 +64,24 @@ METHODS
         an attempt will be made to infer the title from the NAME section in
         the POD, if it exists. As a last resort, a title will be generated
         that looks like "section_(\d+)".
+
+    "callbacks"
+        A reference to a hash containing names and the corresponding
+        callbacks.
+
+        Currently the only valid callback is "link". It is given the text
+        inside a L<> section from the POD, and is expected to return a tuple
+        "($url, $label)". If the value returned for $label is undefined, the
+        value of $url is used as the label.
+
+    "no_toc"
+        Causes the item to not be printed to the index or return in the
+        "toc" field.
+
+    This method returns a hash ref with a table of contents (the "toc"
+    field) suitable for a reStructuredText table of contents.
+
+    E.g.,
 
      my $conv = Pod::POM::View::Restructured->new;
      
@@ -134,5 +162,5 @@ SEE ALSO
     <http://pygments.org/>
 
 VERSION
-     0.01
+    0.02
 
