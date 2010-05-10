@@ -43,8 +43,6 @@ use Pod::POM;
 
     use Pod::POM::View::Restructured;
 
-    my $conv = Pod::POM::View::Restructured->new;
-
     my $link_cb = sub {
         my ($text) = @_;
 
@@ -80,6 +78,8 @@ use Pod::POM;
                  },
 
                 ];
+
+    my $conv = Pod::POM::View::Restructured->new;
 
 
     my $rv = $conv->convert_files($files, "$dest_dir/index.rst", 'My Big Test', $dest_dir);

@@ -33,8 +33,16 @@ Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 
 =head1 DESCRIPTION
 
-This module outputs reStructuredText that is expected to be used with Sphinx.  Verbatim sections (indented paragraphs) in the POD will be output with syntax hilighting for Perl code by default.  See L</"POD commands specifically for reStructuredText"> for how to change this for a particular block.
+This module outputs reStructuredText that is expected to be used
+with Sphinx.  Verbatim sections (indented paragraphs) in the POD
+will be output with syntax hilighting for Perl code by default.
+See L</"POD commands specifically for reStructuredText"> for how
+to change this for a particular block.
 
+For a list of changes in recent versions, see the documentation
+for L<Pod::POM::View::Restructured::Changes>.
+
+This module can be downloaded from L<http://www.cpan.org/authors/id/D/DO/DOWENS/>.
 
 =cut
 
@@ -46,7 +54,7 @@ use Pod::POM;
 
 package Pod::POM::View::Restructured;
 
-our $VERSION = '0.01.1'; # change in POD below!
+our $VERSION = '0.02'; # change in POD below!
 
 use base 'Pod::POM::View::Text';
 
@@ -60,7 +68,9 @@ Constructor.  \%params is optional.  If present, the following keys are valid:
 
 =over 4
 
-=item callbacks
+=item C<callbacks>
+
+See documentation below for C<convert_file()>.
 
 =back
 
@@ -98,8 +108,22 @@ handles.
 sub convert_file {
     my ($self, $source_file, $title, $dest_file, $callbacks) = @_;
 
-    my $view = Pod::POM::View::Restructured->new({ callbacks => $callbacks });
+    my $cb;
+    if ($callbacks) {
+        $cb = { %{ $self->{callbacks} }, %$callbacks };
+    }
+    else {
+        $cb = $self->{callbacks};
+    }
+    
+    my $view = Pod::POM::View::Restructured->new({ callbacks => $cb });
     my $parser = Pod::POM->new;
+
+    unless (-r $source_file) {
+        warn "can't read source file $source_file";
+        return undef;
+    }
+    
     my $pom = $parser->parse_file($source_file);
 
     $view->{title_set} = 1 if defined($title);
@@ -562,8 +586,12 @@ sub view_seq_link {
             return $text;
         }
     }
-    
-    if ($text =~ m{\Ahttps?://}) {
+
+    if ($text =~ m{\A/(.+)}) {
+        (my $section = $1) =~ s/\A"(.+)"/$1/;
+        $text = qq{`$section`_};
+    }
+    elsif ($text =~ m{\Ahttps?://}) {
         $text = qq{`$text <$text>`_};
     }
     elsif ($text =~ /::/) {
@@ -651,7 +679,7 @@ to invoke a command in reStructuredText by accident.
 
 =head1 DEPENDENCIES
 
-Inherits from Pod::POM::View::Text that comes with the Pod::POM distribution.
+Inherits from L<Pod::POM::View::Text> that comes with the Pod::POM distribution.
 
 =head1 AUTHOR
 
@@ -685,7 +713,7 @@ Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
 
 =head1 VERSION
 
- 0.01
+0.02
 
 =cut
 
