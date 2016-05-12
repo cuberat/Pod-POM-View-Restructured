@@ -514,7 +514,7 @@ sub view_for {
             return '';
         }
 
-        return '';
+        return "\n". $node->text() . "\n\n";
     }
 
     return $self->SUPER::view_for($node);
