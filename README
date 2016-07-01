@@ -31,6 +31,11 @@ METHODS
     "callbacks"
         See documentation below for "convert_file()".
 
+    "namespace"
+        If a namespace is declared then links to that namespace are
+        converted to cross references and an anchor is added for each head
+        tag.
+
   "convert_file($source_file, $title, $dest_file, $callbacks)"
     Converts the POD in $source_file to reStructuredText. If $dest_file is
     defined, it writes the output there. If $title is defined, it is used
