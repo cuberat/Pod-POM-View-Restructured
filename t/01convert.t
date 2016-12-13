@@ -1,4 +1,9 @@
 #!/usr/bin/env perl
+#
+# Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>
+#
+# This is free software; you can redistribute it and/or modify it under
+# the same terms as Perl itself. See perlartistic.
 
 use strict;
 use warnings;

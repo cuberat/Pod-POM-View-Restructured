@@ -139,11 +139,14 @@ DEPENDENCIES
     Inherits from Pod::POM::View::Text that comes with the Pod::POM
     distribution.
 
-AUTHOR
+AUTHORS
     Don Owens <don@regexguy.com>
+    Jeff Fearn <Jeff.Fearn@gmail.com>
 
 LICENSE AND COPYRIGHT
     Copyright (c) 2010 Don Owens <don@regexguy.com>. All rights reserved.
+    Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>. All rights
+    reserved.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as Perl itself. See perlartistic.

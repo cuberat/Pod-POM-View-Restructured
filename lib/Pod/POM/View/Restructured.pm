@@ -710,13 +710,20 @@ to invoke a command in reStructuredText by accident.
 
 Inherits from L<Pod::POM::View::Text> that comes with the Pod::POM distribution.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Don Owens <don@regexguy.com>
+=over
+
+=item Don Owens <don@regexguy.com>
+
+=item Jeff Fearn <Jeff.Fearn@gmail.com>
+
+=back
 
 =head1 LICENSE AND COPYRIGHT
 
 Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
+Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>.  All rights reserved.
 
 This is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.  See perlartistic.
