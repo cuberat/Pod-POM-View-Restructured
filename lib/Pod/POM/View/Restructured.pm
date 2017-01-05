@@ -72,6 +72,12 @@ Constructor.  \%params is optional.  If present, the following keys are valid:
 
 See documentation below for C<convert_file()>.
 
+=item C<namespace>
+
+If a namespace is declared then links to that namespace are
+converted to cross references and an anchor is added for each
+head tag.
+
 =back
 
 =cut
@@ -85,7 +91,8 @@ sub new {
     my $callbacks = $params->{callbacks};
     $callbacks = { } unless $callbacks;
     $self->{callbacks} = $callbacks;
-    
+    $self->{namespace} = delete($params->{namespace});
+
     return $self;
 }
 
@@ -116,7 +123,7 @@ sub convert_file {
         $cb = $self->{callbacks};
     }
     
-    my $view = Pod::POM::View::Restructured->new({ callbacks => $cb });
+    my $view = Pod::POM::View::Restructured->new({ callbacks => $cb, namespace => $self->{namespace} });
     my $parser = Pod::POM->new;
 
     unless (-r $source_file) {
@@ -354,6 +361,16 @@ sub _build_header {
         $header = $line . "\n" . $header;
     }
 
+    my $namespace = $self->{namespace};
+    if($namespace) {
+            my $a = $text;
+            # prepend the namesspace to gaurantee document wide unique names
+            $a = "$namespace\:\:$a" unless($text =~ /^$namespace/);
+            $a =~ s/(?:\s)/-/g;
+
+            $header = qq{.. _$a:\n\n} .  $header;
+    }
+
     return "\n" . $header;
 }
 
@@ -587,6 +604,11 @@ sub view_seq_link {
         }
     }
 
+    my $url    = '';
+    my $label  = '';
+    my $module = $text;
+    my $namespace = $self->{namespace};
+
     if ($text =~ m{\A/(.+)}) {
         (my $section = $1) =~ s/\A"(.+)"/$1/;
         $text = qq{`$section`_};
@@ -595,16 +617,23 @@ sub view_seq_link {
         $text = qq{`$text <$text>`_};
     }
     elsif ($text =~ /::/) {
-        my $label = $text;
-        my $module = $text;
+        $label = $text;
         if ($text =~ /\A(.+?)\|(.+::.+)/) {
             $label = $1;
             $module = $2;
         }
 
-        $module = $self->_url_encode($module);
-        my $url = "http://search.cpan.org/search?query=$module&mode=module";
-        $text = qq{`$label <$url>`_};
+        # Links in this namespace are cross refereneces
+        if (($namespace) and ($text =~ /^$namespace/)) {
+            $module = qq{$namespace\:\:$module} unless($module =~ /^$namespace/);
+            $module =~ s/(?:\s)/-/g;
+            $text = qq{:ref:`$label <$module>`};
+        }
+        else {
+            $module = $self->_url_encode($module);
+            my $url = "http://search.cpan.org/search?query=$module&mode=module";
+            $text = qq{`$label <$url>`_};
+        }
     }
     
     return $text;
@@ -681,13 +710,20 @@ to invoke a command in reStructuredText by accident.
 
 Inherits from L<Pod::POM::View::Text> that comes with the Pod::POM distribution.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Don Owens <don@regexguy.com>
+=over
+
+=item Don Owens <don@regexguy.com>
+
+=item Jeff Fearn <Jeff.Fearn@gmail.com>
+
+=back
 
 =head1 LICENSE AND COPYRIGHT
 
 Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
+Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>.  All rights reserved.
 
 This is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.  See perlartistic.

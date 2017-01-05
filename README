@@ -31,6 +31,11 @@ METHODS
     "callbacks"
         See documentation below for "convert_file()".
 
+    "namespace"
+        If a namespace is declared then links to that namespace are
+        converted to cross references and an anchor is added for each head
+        tag.
+
   "convert_file($source_file, $title, $dest_file, $callbacks)"
     Converts the POD in $source_file to reStructuredText. If $dest_file is
     defined, it writes the output there. If $title is defined, it is used
@@ -134,11 +139,14 @@ DEPENDENCIES
     Inherits from Pod::POM::View::Text that comes with the Pod::POM
     distribution.
 
-AUTHOR
+AUTHORS
     Don Owens <don@regexguy.com>
+    Jeff Fearn <Jeff.Fearn@gmail.com>
 
 LICENSE AND COPYRIGHT
     Copyright (c) 2010 Don Owens <don@regexguy.com>. All rights reserved.
+    Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>. All rights
+    reserved.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as Perl itself. See perlartistic.
