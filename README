@@ -13,7 +13,7 @@ SYNOPSIS
 DESCRIPTION
     This module outputs reStructuredText that is expected to be used with
     Sphinx. Verbatim sections (indented paragraphs) in the POD will be
-    output with syntax hilighting for Perl code by default. See "POD
+    output with syntax highlighting for Perl code by default. See "POD
     commands specifically for reStructuredText" for how to change this for a
     particular block.
 
@@ -100,9 +100,9 @@ POD commands specifically for reStructuredText
 
   =for pod2rst next-code-block: *lang*
     This sets up the next verbatim section, i.e., the next indented
-    paragraph to be hilighted according to the syntax of the
+    paragraph to be highlighted according to the syntax of the
     programming/markup/config language *lang*. Verbatim sections are assumed
-    to be Perl code by default. Sphinx uses Pygments to do syntax hilighting
+    to be Perl code by default. Sphinx uses Pygments to do syntax highlighting
     in these sections, so you can use any value for *lang* that Pygments
     supports, e.g., Python, C, C++, Javascript, SQL, etc.
 
@@ -116,12 +116,12 @@ EXAMPLES
     and building
 
 TODO
-    code hilighting
+    code highlighting
         Currently, a verbatim block (indented paragraph) gets output as a
         Perl code block by default in reStructuredText. There should be an
         option (e.g., in the constructor) to change the language for
-        hilighting purposes (for all verbatim blocks), or disable syntax
-        hilighting and just make it a preformatted paragraph. There is a way
+        highlighting purposes (for all verbatim blocks), or disable syntax
+        highlighting and just make it a preformatted paragraph. There is a way
         to do this in POD (see "POD commands specifically for
         reStructuredText"), but there should also be an option in the
         constructor.
