@@ -1,7 +1,3 @@
-# Original authors: don
-# $Revision: $
-
-
 =pod
 
 =head1 NAME
@@ -9,6 +5,16 @@
 Pod::POM::View::Restructured::Changes - List of major changes in Pod::POM::View::Restructured
 
 =head1 CHANGES
+
+=head2 Version 0.03
+
+=over 4
+
+=item Applied Debian patch to POD.
+
+=item Added C<namespace> option to convert links to cross references.
+
+=back
 
 =head2 Version 0.02
 
@@ -34,9 +40,6 @@ Pod::POM::View::Restructured::Changes - List of major changes in Pod::POM::View:
 =item Initial release.
 
 =back
-
-
-
 
 =cut
 

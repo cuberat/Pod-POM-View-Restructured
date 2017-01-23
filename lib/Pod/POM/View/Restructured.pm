@@ -1,6 +1,3 @@
-# Original authors: don
-# $Revision$
-
 # Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
 #
 # This is free software; you can redistribute it and/or modify it under
@@ -13,7 +10,6 @@
 # useful, but WITHOUT ANY WARRANTY; without even the implied
 # warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 # PURPOSE.
-
 
 =pod
 
@@ -54,7 +50,7 @@ use Pod::POM;
 
 package Pod::POM::View::Restructured;
 
-our $VERSION = '0.02'; # change in POD below!
+our $VERSION = '0.03'; # change in POD below!
 
 use base 'Pod::POM::View::Text';
 
@@ -749,7 +745,7 @@ Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
 
 =head1 VERSION
 
-0.02
+0.03
 
 =cut
 
