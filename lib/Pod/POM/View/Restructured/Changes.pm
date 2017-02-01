@@ -1,3 +1,9 @@
+# AUTHOR: Don Owens <don@regexguy.com>
+# AUTHOR: Jeff Fearn <Jeff.Fearn@gmail.com>
+# OWNER: 2010 Don Owens <don@regexguy.com>
+# OWNER: 2016 Jeff Fearn <Jeff.Fearn@gmail.com>
+# LICENSE: Perl_5
+
 =pod
 
 =head1 NAME

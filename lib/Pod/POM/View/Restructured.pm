@@ -1,15 +1,8 @@
-# Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
-#
-# This is free software; you can redistribute it and/or modify it under
-# the Perl Artistic license.  You should have received a copy of the
-# Artistic license with this distribution, in the file named
-# "Artistic".  You may also obtain a copy from
-# http://regexguy.com/license/Artistic
-#
-# This program is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied
-# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-# PURPOSE.
+# AUTHOR: Don Owens <don@regexguy.com>
+# AUTHOR: Jeff Fearn <Jeff.Fearn@gmail.com>
+# OWNER: 2010 Don Owens <don@regexguy.com>
+# OWNER: 2016 Jeff Fearn <Jeff.Fearn@gmail.com>
+# LICENSE: Perl_5
 
 =pod
 
@@ -705,29 +698,6 @@ to invoke a command in reStructuredText by accident.
 =head1 DEPENDENCIES
 
 Inherits from L<Pod::POM::View::Text> that comes with the Pod::POM distribution.
-
-=head1 AUTHORS
-
-=over
-
-=item Don Owens <don@regexguy.com>
-
-=item Jeff Fearn <Jeff.Fearn@gmail.com>
-
-=back
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
-Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>.  All rights reserved.
-
-This is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.  See perlartistic.
-
-This program is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.
 
 =head1 SEE ALSO
 
