@@ -1,6 +1,9 @@
 #!/usr/local/bin/perl
 
-# Original authors: don
+# AUTHOR: Don Owens <don@regexguy.com>
+# OWNER: 2010 Don Owens <don@regexguy.com>
+# LICENSE: Perl_5
+
 # $Revision$
 
 
@@ -196,27 +199,10 @@ Specifies the section title for the file.
 
 =back
 
-=head1 AUTHOR
-
-Don Owens <don@regexguy.com>
-
 =head1 SEE ALSO
 
 L<Pod::POM::View::Restructured>, L<pod2html>
 
 Sphinx: L<http://sphinx.pocoo.org/>
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2010 Don Owens <don@regexguy.com>.  All rights reserved.
-
-This is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.  See perlartistic.
-
-This program is distributed in the hope that it will be
-useful, but WITHOUT ANY WARRANTY; without even the implied
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.
-
 
 =cut
