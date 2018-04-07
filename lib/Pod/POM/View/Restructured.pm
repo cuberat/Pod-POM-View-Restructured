@@ -1,7 +1,9 @@
 # AUTHOR: Don Owens <don@regexguy.com>
 # AUTHOR: Jeff Fearn <Jeff.Fearn@gmail.com>
+# AUTHOR: Alex Muntada <alexm@cpan.org>
 # OWNER: 2010 Don Owens <don@regexguy.com>
 # OWNER: 2016 Jeff Fearn <Jeff.Fearn@gmail.com>
+# OWNER: 2016-2018 Alex Muntada <alexm@cpan.org>
 # LICENSE: Perl_5
 
 =pod
