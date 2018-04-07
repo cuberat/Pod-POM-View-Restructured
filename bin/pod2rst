@@ -4,9 +4,6 @@
 # OWNER: 2010 Don Owens <don@regexguy.com>
 # LICENSE: Perl_5
 
-# VERSION
-
-
 use strict;
 use warnings;
 use Carp;
@@ -14,10 +11,12 @@ use Getopt::Long qw(:config no_ignore_case bundling);
 
 use Pod::POM::View::Restructured;
 
+# VERSION
+
 # main
 {
     # local($SIG{__DIE__}) = sub { &Carp::confess };
-    my $self = bless { };
+    my $self = bless { }, __PACKAGE__;
 
     my $opts = $self->get_options([ "help|h",
                                     "in_file|infile|in-file|i=s",

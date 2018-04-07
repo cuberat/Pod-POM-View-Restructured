@@ -14,13 +14,12 @@ Pod::POM::View::Restructured - View for Pod::POM that outputs reStructuredText
 
 =head1 SYNOPSIS
 
- use Pod::POM::View::Restructured;
- 
- my $view = Pod::POM::View::Restructured->new;
- my $parser = Pod::POM->new;
- my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
- my $out = $pom->present($view);
-
+    use Pod::POM::View::Restructured;
+    
+    my $view = Pod::POM::View::Restructured->new;
+    my $parser = Pod::POM->new;
+    my $pom = $parser->parse_file("$top_dir/lib/Pod/POM/View/Restructured.pm");
+    my $out = $pom->present($view);
 
 =head1 DESCRIPTION
 
@@ -76,7 +75,7 @@ head tag.
 sub new {
     my ($class, $params) = @_;
     $params = { } unless $params and UNIVERSAL::isa($params, 'HASH');
-    
+
     my $self = bless { seen_something => 0, title_set => 0, params => { } }, ref($class) || $class;
 
     my $callbacks = $params->{callbacks};
@@ -113,15 +112,15 @@ sub convert_file {
     else {
         $cb = $self->{callbacks};
     }
-    
+
     my $view = Pod::POM::View::Restructured->new({ callbacks => $cb, namespace => $self->{namespace} });
     my $parser = Pod::POM->new;
 
     unless (-r $source_file) {
         warn "can't read source file $source_file";
-        return undef;
+        return;
     }
-    
+
     my $pom = $parser->parse_file($source_file);
 
     $view->{title_set} = 1 if defined($title);
@@ -142,7 +141,7 @@ sub convert_file {
         else {
             unless (open($out_fh, '>', $dest_file)) {
                 warn "couldn't open output file $dest_file";
-                return undef;
+                return;
             }
         }
 
@@ -207,16 +206,15 @@ C<toc> field) suitable for a reStructuredText table of contents.
 
 E.g.,
 
- my $conv = Pod::POM::View::Restructured->new;
- 
- my $files = [
-              { source_file => "$base_dir/Restructured.pm" },
-              { source_file => "$base_dir/DWIW.pm" },
-              { source_file => "$base_dir/Wrapper.pm" },
-             ];
- 
- 
- my $rv = $conv->convert_files($files, "$dest_dir/index.rst", 'My Big Test', $dest_dir);
+    my $conv = Pod::POM::View::Restructured->new;
+    
+    my $files = [
+                  { source_file => "$base_dir/Restructured.pm" },
+                  { source_file => "$base_dir/DWIW.pm" },
+                  { source_file => "$base_dir/Wrapper.pm" },
+                 ];
+    
+    my $rv = $conv->convert_files($files, "$dest_dir/index.rst", 'My Big Test', $dest_dir);
 
 
 =cut
@@ -243,14 +241,14 @@ sub convert_files {
         $count++;
         my $data = $self->convert_file($spec->{source_file}, $spec->{title},
                                        $spec->{dest_file}, $spec->{callbacks});
-        
+
         my $this_title = $data->{title};
         # print STDERR Data::Dumper->Dump([ $this_title ], [ 'this_title' ]) . "\n\n";
 
         unless (defined($this_title) and $this_title !~ /\A\s*\Z/) {
             $this_title = 'section_' . $count;
         }
-        
+
         my $name = $spec->{dest_file};
         if (defined($name)) {
             $name =~ s/\.rst\Z//;
@@ -259,10 +257,10 @@ sub convert_files {
             ($name = $this_title) =~ s/\W/_/g;
             my $dest_file = $out_dir . '/' . $name . '.rst';
             my $out_fh;
-            
+
             unless (open($out_fh, '>', $dest_file)) {
                 warn "couldn't open output file $dest_file";
-                return undef;
+                return;
             }
 
             print $out_fh $data->{content};
@@ -272,7 +270,7 @@ sub convert_files {
         unless ($spec->{no_toc}) {
             $toc .= '   ' . $name . "\n";
         }
-        
+
         if ($index_fh and not $spec->{no_toc}) {
             print $index_fh "   " . $name . "\n";
         }
@@ -288,19 +286,19 @@ sub convert_files {
 sub _get_file_handle {
     my ($self, $file, $mode) = @_;
 
-    return undef unless defined $file;
-    
+    return unless defined $file;
+
     if (ref($file) and UNIVERSAL::isa($file, 'GLOB')) {
         return $file;
     }
 
     $mode = '<' unless $mode;
-    
+
     my $fh;
     if ($file ne '') {
         unless (open($fh, $mode, $file)) {
             warn "couldn't open input file $file: $!";
-            return undef;
+            return;
         }
     }
 
@@ -324,19 +322,19 @@ sub _generic_head_multi {
 
     my $title = $node->title()->present($self);
     my $content = $node->content()->present($self);
-    
+
     $title = ' ' if $title eq '';
     # my $section_line = $marker x length($title);
 
     my $section = $self->_build_header($title, $marker, $do_overline) . "\n" . $content;
-    
-#     my $section = $title . "\n" . $section_line . "\n\n" . $content;
-#     if ($do_overline) {
-#         $section = $section_line . "\n" . $section;
-#     }
+
+    # my $section = $title . "\n" . $section_line . "\n\n" . $content;
+    # if ($do_overline) {
+    #     $section = $section_line . "\n" . $section;
+    # }
 
     $section .= "\n";
-    
+
     return wantarray ? ($section, $content, $title) : $section;
 }
 
@@ -394,15 +392,15 @@ sub view_head1 {
                 $self->{title_set} = 1;
 
                 $section = $self->_build_header($mod_name, '#', 1) . $section;
-                
+
                 # my $line = '#' x length($mod_name);
                 # $section = $line . "\n" . $mod_name . "\n" . $line . "\n\n" . $section;
             }
-            
+
             return $section;
         }
     }
-    
+
     $self->{seen_something} = 1;
     return $section;
 }
@@ -435,15 +433,15 @@ sub view_item {
 
     my $title = $node->title()->present($self);
     my $content = $node->content()->present($self);
-    
+
     $title =~ s/\A\s+//;
     $title =~ s/\n/ /;
-#     $content =~ s/\n/\n /g;
-#     $content = ' ' . $content;
+    # $content =~ s/\n/\n /g;
+    # $content = ' ' . $content;
 
     $self->{view_item_count}++;
     $content = $self->_do_indent($content, 1, "[[view_item_$self->{view_item_count}]]");
-    
+
     return "\n" . $title . "\n" . $content . "\n\n";
 }
 
@@ -493,7 +491,7 @@ sub view_verbatim {
             $block_part = ".. code-block:: $lang\n\n";
         }
     }
-   
+
     my $content = $block_part . $node_part;
 
     return "\n\n" . $content . "\n\n";
@@ -505,7 +503,7 @@ sub view_for {
     my $fmt = $node->format();
 
     # print STDERR "got for: fmt='$fmt', text='" . $node->text() . "'\n";
-    
+
     if ($fmt eq 'pod2rst') {
         my $text = $node->text();
         if ($text =~ /\A\s*next-code-block\s*:\s*(\S+)/) {
@@ -540,7 +538,7 @@ sub view_seq_italic {
 
     $text =~ s/\*/\\*/g;
     $text =~ s/\`/\\`/g;
-    
+
     return '\ *' . $text . '*\ ';
 }
 
@@ -549,7 +547,7 @@ sub view_seq_file {
 
     $text =~ s/\*/\\*/g;
     $text =~ s/\`/\\`/g;
-    
+
     return '\ *' . $text . '*\ ';
 }
 
@@ -624,13 +622,13 @@ sub view_seq_link {
             $text = qq{`$label <$url>`_};
         }
     }
-    
+
     return $text;
 }
 
 sub _url_encode {
     my ($self, $str) = @_;
-    
+
     use bytes;
     $str =~ s{([^A-Za-z0-9_])}{sprintf("%%%02x", ord($1))}eg;
     return $str;
@@ -661,7 +659,7 @@ Javascript, SQL, etc.
 
 =for pod2rst next-code-block: bash
 
- pod2rst --infile=Restructured.pm --outfile=restructured.rst
+    pod2rst --infile=Restructured.pm --outfile=restructured.rst
 
 =back
 
@@ -716,12 +714,3 @@ Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
 =cut
 
 1;
-
-# Local Variables: #
-# mode: perl #
-# tab-width: 4 #
-# indent-tabs-mode: nil #
-# cperl-indent-level: 4 #
-# perl-indent-level: 4 #
-# End: #
-# vim:set ai si et sta ts=4 sw=4 sts=4:
