@@ -308,9 +308,7 @@ sub _get_file_handle {
 sub view_pod {
     my ($self, $node) = @_;
 
-    my $content = ".. highlight:: perl\n\n";
-    
-    return $content . $node->content()->present($self);
+    return $node->content()->present($self);
 }
 
 sub _generic_head {
