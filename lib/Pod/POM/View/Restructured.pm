@@ -43,7 +43,7 @@ use Pod::POM;
 
 package Pod::POM::View::Restructured;
 
-our $VERSION = '0.03'; # change in POD below!
+# VERSION
 
 use base 'Pod::POM::View::Text';
 
@@ -710,10 +710,6 @@ reStructuredText: L<http://docutils.sourceforge.net/rst.html>
 Sphinx (uses reStructuredText): L<http://sphinx.pocoo.org/>
 
 Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
-
-=head1 VERSION
-
-0.03
 
 =cut
 

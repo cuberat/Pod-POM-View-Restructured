@@ -4,7 +4,7 @@
 # OWNER: 2010 Don Owens <don@regexguy.com>
 # LICENSE: Perl_5
 
-# $Revision$
+# VERSION
 
 
 use strict;
