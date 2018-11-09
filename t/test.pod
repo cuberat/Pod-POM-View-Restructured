@@ -1,0 +1,11 @@
+=pod
+
+=over
+
+=item item1
+
+=item item2
+
+=back
+
+=cut
