@@ -436,6 +436,19 @@ sub view_item {
 
     $title =~ s/\A\s+//;
     $title =~ s/\n/ /;
+    $title = "- $title"
+        unless $title =~ /
+            # the line starts with
+            \A
+            # single unordered bullet,
+            (?:   [-*+]
+            # or ordered bullet followed by dot,
+            |     [1AaIi] \.
+            # or ordered bullet within parens (first optional),
+            | \(? [1AaIi] \)
+            # then finally followed by whitespace.
+            )\s
+            /xms;
     # $content =~ s/\n/\n /g;
     # $content = ' ' . $content;
 
