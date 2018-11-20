@@ -441,7 +441,7 @@ sub view_item {
             # the line starts with
             \A
             # single unordered bullet,
-            (?:   [-*+]
+            (?:(?:[-+] | \\[*])
             # or ordered bullet followed by dot,
             |     [1AaIi] \.
             # or ordered bullet within parens (first optional),
@@ -449,6 +449,8 @@ sub view_item {
             # then finally followed by whitespace.
             )\s
             /xms;
+    # Make asterisk an actual bullet
+    $title =~ s/ \A \\ [*]/*/xms;
     # $content =~ s/\n/\n /g;
     # $content = ' ' . $content;
 
