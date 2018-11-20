@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More;
 
 use Pod::POM::View::Restructured;
 
@@ -29,3 +29,5 @@ my $count = 0;
 foreach my $str (@expected) {
     cmp_ok($rv->{content}, '=~', $str, "string cmp " . $count++);
 }
+
+done_testing();
