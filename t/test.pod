@@ -6,6 +6,12 @@
 
 =item item2
 
+=item * item3
+
+=item + item4
+
+=item - item5
+
 =back
 
 =cut

@@ -22,12 +22,15 @@ ok($rv);
 my @expected = (
     '- item1',
     '- item2',
+    '* item3',
+    '+ item4',
+    '- item5',
 );
 
 my $count = 0;
 
 foreach my $str (@expected) {
-    cmp_ok($rv->{content}, '=~', $str, "string cmp " . $count++);
+    cmp_ok($rv->{content}, '=~', "\Q$str\E", "string cmp " . $count++);
 }
 
 done_testing();
