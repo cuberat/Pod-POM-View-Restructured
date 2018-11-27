@@ -17,9 +17,6 @@ DESCRIPTION
     commands specifically for reStructuredText" for how to change this for a
     particular block.
 
-    For a list of changes in recent versions, see the documentation for
-    Pod::POM::View::Restructured::Changes.
-
     This module can be downloaded from
     <https://metacpan.org/release/Pod-POM-View-Restructured>.
 
