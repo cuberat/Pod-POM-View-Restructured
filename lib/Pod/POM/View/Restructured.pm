@@ -32,7 +32,7 @@ to change this for a particular block.
 For a list of changes in recent versions, see the documentation
 for L<Pod::POM::View::Restructured::Changes>.
 
-This module can be downloaded from L<http://www.cpan.org/authors/id/D/DO/DOWENS/>.
+This module can be downloaded from L<https://metacpan.org/release/Pod-POM-View-Restructured>.
 
 =cut
 

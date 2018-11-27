@@ -21,7 +21,7 @@ DESCRIPTION
     Pod::POM::View::Restructured::Changes.
 
     This module can be downloaded from
-    <http://www.cpan.org/authors/id/D/DO/DOWENS/>.
+    <https://metacpan.org/release/Pod-POM-View-Restructured>.
 
 METHODS
   "new(\%params)"
