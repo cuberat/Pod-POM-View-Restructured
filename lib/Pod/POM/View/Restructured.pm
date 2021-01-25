@@ -29,9 +29,6 @@ will be output with syntax highlighting for Perl code by default.
 See L</"POD commands specifically for reStructuredText"> for how
 to change this for a particular block.
 
-For a list of changes in recent versions, see the documentation
-for L<Pod::POM::View::Restructured::Changes>.
-
 This module can be downloaded from L<https://metacpan.org/release/Pod-POM-View-Restructured>.
 
 =cut
