@@ -3,7 +3,7 @@
 # AUTHOR: Alex Muntada <alexm@cpan.org>
 # OWNER: 2010 Don Owens <don@regexguy.com>
 # OWNER: 2016 Jeff Fearn <Jeff.Fearn@gmail.com>
-# OWNER: 2016-2018 Alex Muntada <alexm@cpan.org>
+# OWNER: 2016-2021 Alex Muntada <alexm@cpan.org>
 # LICENSE: Perl_5
 
 =pod
@@ -719,9 +719,9 @@ L<pod2rst> (distributed with Pod::POM::View::HTML)
 
 reStructuredText: L<http://docutils.sourceforge.net/rst.html>
 
-Sphinx (uses reStructuredText): L<http://sphinx.pocoo.org/>
+Sphinx (uses reStructuredText): L<https://www.sphinx-doc.org/>
 
-Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
+Pygments (used by Sphinx for syntax highlighting): L<https://pygments.org/>
 
 =cut
 
