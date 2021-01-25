@@ -162,7 +162,7 @@ SEE ALSO
 
     reStructuredText: <http://docutils.sourceforge.net/rst.html>
 
-    Sphinx (uses reStructuredText): <http://sphinx.pocoo.org/>
+    Sphinx (uses reStructuredText): <https://www.sphinx-doc.org/>
 
     Pygments (used by Sphinx for syntax highlighting):
     <http://pygments.org/>

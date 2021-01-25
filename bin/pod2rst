@@ -202,6 +202,6 @@ Specifies the section title for the file.
 
 L<Pod::POM::View::Restructured>, L<pod2html>
 
-Sphinx: L<http://sphinx.pocoo.org/>
+Sphinx: L<https://www.sphinx-doc.org/>
 
 =cut

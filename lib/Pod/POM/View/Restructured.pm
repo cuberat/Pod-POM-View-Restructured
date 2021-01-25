@@ -719,7 +719,7 @@ L<pod2rst> (distributed with Pod::POM::View::HTML)
 
 reStructuredText: L<http://docutils.sourceforge.net/rst.html>
 
-Sphinx (uses reStructuredText): L<http://sphinx.pocoo.org/>
+Sphinx (uses reStructuredText): L<https://www.sphinx-doc.org/>
 
 Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
 
