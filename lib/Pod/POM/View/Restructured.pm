@@ -721,7 +721,7 @@ reStructuredText: L<http://docutils.sourceforge.net/rst.html>
 
 Sphinx (uses reStructuredText): L<https://www.sphinx-doc.org/>
 
-Pygments (used by Sphinx for syntax highlighting): L<http://pygments.org/>
+Pygments (used by Sphinx for syntax highlighting): L<https://pygments.org/>
 
 =cut
 
