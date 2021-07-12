@@ -1,0 +1,82 @@
+
+********************************
+Long title converted incorrectly
+********************************
+
+
+dummy
+=====
+
+
+dummy
+-----
+
+
+A very looooooooooooooooooooooooooooooooooooooooooooooooong title
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+**************************
+Item gives an extra bullet
+**************************
+
+
+
+- 
+ 
+ This should not make an extra bullet. pod2pdf/pod2man does not do so.
+ 
+
+
+
+***************************************
+Back quotes are not converted correctly
+***************************************
+
+
+\ **Bold back quotes: \`-i\`**\ 
+
+
+***************************************************
+The items starting with - are converted incorrectly
+***************************************************
+
+
+
+- A B C
+
+
+
+- A - C
+
+
+
+- \- \- C
+
+
+
+- \- \- \-
+
+
+
+
+*****************
+Backslash ignored
+*****************
+
+
+\\n is newline
+
+
+*******************************
+Bold at end of line merges line
+*******************************
+
+
+**word**
+other word
+
