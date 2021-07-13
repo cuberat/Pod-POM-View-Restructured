@@ -6,4 +6,12 @@ B<foo>
 
 B<`-i`>
 
+I<foo>
+
+I<`-i`>
+
+F<foo>
+
+F<`-i`>
+
 =cut

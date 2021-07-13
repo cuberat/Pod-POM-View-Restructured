@@ -543,7 +543,6 @@ sub view_seq_bold {
     my ($self, $text) = @_;
 
     $text =~ s/\*/\\*/g;
-    $text =~ s/\`/\\`/g;
 
     return '\ **' . $text . '**\ ';
 }
@@ -552,7 +551,6 @@ sub view_seq_italic {
     my ($self, $text) = @_;
 
     $text =~ s/\*/\\*/g;
-    $text =~ s/\`/\\`/g;
 
     return '\ *' . $text . '*\ ';
 }
@@ -561,7 +559,6 @@ sub view_seq_file {
     my ($self, $text) = @_;
 
     $text =~ s/\*/\\*/g;
-    $text =~ s/\`/\\`/g;
 
     return '\ *' . $text . '*\ ';
 }
