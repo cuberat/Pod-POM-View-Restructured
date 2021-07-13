@@ -338,6 +338,9 @@ sub _generic_head_multi {
 sub _build_header {
     my ($self, $text, $marker, $do_overline) = @_;
 
+    # join lines in a multiline header
+    $text =~ s/\n/ /g;
+
     my $line = $marker x length($text);
     my $header = $text . "\n" . $line . "\n";
 
