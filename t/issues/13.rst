@@ -1,0 +1,9 @@
+
+foo\ **bar**\ 
+
+\ **foo**\ bar
+
+fo\ **ob**\ ar
+
+\ **foo**
+bar
