@@ -1,0 +1,15 @@
+=pod
+
+Foo B<>> bar B<baz>.
+
+Foo B<>>> bar B<baz>.
+
+Foo B<>>>> bar B<baz>.
+
+Foo B<E<gt>> bar B<baz>.
+
+Foo B<E<gt>E<gt>> bar B<baz>.
+
+Foo B<E<gt>E<gt>E<gt>> bar B<baz>.
+
+=cut
