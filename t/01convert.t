@@ -20,7 +20,7 @@ my $rv = $conv->convert_file('lib/Pod/POM/View/Restructured.pm');
 ok($rv);
 
 # An array of RST strings we should get in the output
-# You will ahve to escape any quanity chars. e.g. ?, *, etc.
+# You will have to escape any quanity chars. e.g. ?, *, etc.
 my @expected = (
     '.. _Pod::POM::View::Restructured:',
     '.. _Pod::POM::View::Restructured::NAME:',

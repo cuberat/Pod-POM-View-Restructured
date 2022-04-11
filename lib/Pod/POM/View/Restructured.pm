@@ -348,7 +348,7 @@ sub _build_header {
     my $namespace = $self->{namespace};
     if($namespace) {
             my $a = $text;
-            # prepend the namesspace to gaurantee document wide unique names
+            # prepend the namesspace to guarantee document wide unique names
             $a = "$namespace\:\:$a" unless($text =~ /^$namespace/);
             $a =~ s/(?:\s)/-/g;
 
@@ -622,7 +622,7 @@ sub view_seq_link {
             $module = $2;
         }
 
-        # Links in this namespace are cross refereneces
+        # Links in this namespace are cross references
         if (($namespace) and ($text =~ /^$namespace/)) {
             $module = qq{$namespace\:\:$module} unless($module =~ /^$namespace/);
             $module =~ s/(?:\s)/-/g;
