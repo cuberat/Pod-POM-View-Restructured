@@ -1,0 +1,50 @@
+=pod
+
+=head1 Long title converted incorrectly
+
+=head2 dummy
+
+=head3 dummy
+
+=head4 A very looooooooooooooooooooooooooooooooooooooooooooooooong
+title
+
+=head1 Item gives an extra bullet
+
+=over 4
+
+=item *
+
+This should not make an extra bullet. pod2pdf/pod2man does not do so.
+
+=back
+
+=head1 Back quotes are not converted correctly
+
+B<Bold back quotes: `-i`>
+
+=head1 The items starting with - are converted incorrectly
+
+=over
+
+=item A B C
+
+=item A - C
+
+=item - - C
+
+=item - - -
+
+=back
+
+=head1 Backslash ignored
+
+\n is newline
+
+=head1 Bold at end of line merges line
+
+B<word>
+other word
+
+
+=cut

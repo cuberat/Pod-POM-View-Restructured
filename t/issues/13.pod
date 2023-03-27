@@ -1,0 +1,12 @@
+=pod
+
+fooB<bar>
+
+B<foo>bar
+
+foB<ob>ar
+
+B<foo>
+bar
+
+=cut
