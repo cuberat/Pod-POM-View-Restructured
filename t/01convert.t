@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 #
 # Copyright (c) 2016 Jeff Fearn <Jeff.Fearn@gmail.com>
+# Copyright (c) 2026 Alex Muntada <alexm@alexm.org>
 #
 # This is free software; you can redistribute it and/or modify it under
 # the same terms as Perl itself. See perlartistic.
