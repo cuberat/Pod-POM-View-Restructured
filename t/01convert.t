@@ -24,7 +24,7 @@ ok($rv);
 my @expected = (
     '.. _Pod::POM::View::Restructured:',
     '.. _Pod::POM::View::Restructured::NAME:',
-    '`Pod::POM <http://search.cpan.org/search\?query=Pod%3a%3aPOM&mode=module>`_'
+    '`Pod::POM <https://metacpan.org/search\?q=Pod%3a%3aPOM>`_'
 );
 
 my $count = 0;

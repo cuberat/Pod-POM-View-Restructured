@@ -630,7 +630,7 @@ sub view_seq_link {
         }
         else {
             $module = $self->_url_encode($module);
-            my $url = "http://search.cpan.org/search?query=$module&mode=module";
+            my $url = "https://metacpan.org/search?q=$module";
             $text = qq{`$label <$url>`_};
         }
     }
